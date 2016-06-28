@@ -1,2 +1,2 @@
 # LifeQuery
-An android app named LR
+An android app named LQ
