@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">LifeQuery</string>
+    <string-array name="spinner_drop_down_menu">
+        <item>电话归属地</item>
+        <item>IP地址</item>
+        <item>邮编</item>
+        <item>银行卡</item>
+        <item>苹果序列号</item>
+        <item>苹果IMEI</item>
+        <item>汇率</item>
+        <item>快递</item>
+        <item>股票</item>
+        <item>火车票</item>
+        <item>商标</item>
+        <item>景点门票</item>
+        <item>万年历</item>
+
+    </string-array>
 </resources>
