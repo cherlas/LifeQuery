@@ -5,13 +5,13 @@ package com.weather.yogurt.lifequery.model;
  */
 public class TelephoneNumberOwnership {
     private String telephoneNumber;
-    private String search_date;
-    public String getSearch_date() {
-        return search_date;
+    private String searchDate;
+    public String getSearchDate() {
+        return searchDate;
     }
 
-    public void setSearch_date(String search_date) {
-        this.search_date = search_date;
+    public void setSearchDate(String searchDate) {
+        this.searchDate = searchDate;
     }
 
     public String getTelephoneNumber() {
