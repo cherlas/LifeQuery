@@ -96,7 +96,7 @@ public class QueryDatabaseOpenHelper extends SQLiteOpenHelper{
     /*
       万年历建表语句
     */
-    public static final String CREATE_PERPETUAL_CALENDAR="create table PerpetualCalendar\n("
+    public static final String CREATE_PERPETUAL_CALENDAR="create table PerpetualCalendar("
             +"id integer primary key autoincrement,"
             +"perpetual_calendar text"
             +"perpetual_calendar_search_date text)";
