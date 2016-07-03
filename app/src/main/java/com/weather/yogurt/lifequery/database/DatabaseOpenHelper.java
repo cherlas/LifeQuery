@@ -108,6 +108,19 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TELEPHONE_HOME_OWNERSHIP);
+        db.execSQL(CREATE_IP_ADDRESS);
+        db.execSQL(CREATE_APPLE_SERIAL_NUMBER);
+        db.execSQL(CREATE_APPLE_IMEI_NUMBER);
+        db.execSQL(CREATE_EXPRESS);
+        db.execSQL(CREATE_BANK_CARD);
+        db.execSQL(CREATE_SHARES);
+        db.execSQL(CREATE_TRAIN_TICKETS);
+        db.execSQL(CREATE_ZIP_CODE);
+        db.execSQL(CREATE_EXCHANGE_RATE);
+        db.execSQL(CREATE_TRADEMARK);
+        db.execSQL(CREATE_ATTRACTIONSTICKETS_PRICE);
+        db.execSQL(CREATE_PERPETUAL_CALENDAR);
 
     }
 
