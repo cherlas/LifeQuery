@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Yogurt on 16/7/3.
  */
-public class DatabaseOpenHelper extends SQLiteOpenHelper{
+public class QueryDatabaseOpenHelper extends SQLiteOpenHelper{
 
     /*
        电话归属地建表语句
@@ -102,7 +102,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
             +"perpetual_calendar_search_date text)";
 
 
-    public DatabaseOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public QueryDatabaseOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
