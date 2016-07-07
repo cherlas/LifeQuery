@@ -14,6 +14,8 @@
         android:layout_weight="2.3"
         android:layout_marginStart="40dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity=""
         android:id="@+id/spinner_choose_item"
         android:layout_width="0dp" />
     <EditText
@@ -26,11 +28,20 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
+        android:id="@+id/search_button"
         android:contentDescription="@string/image_button_description"
         android:background="@drawable/abc_ic_search_api_mtrl_alpha"
         android:layout_marginTop="13dp"
         android:layout_marginEnd="42dp"
         android:scaleType="fitCenter"/>
 </LinearLayout>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.baoyz.SwipeMenuListView.SwipeMenuListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/history_record"/>
+</ScrollView>
 
 </LinearLayout>
