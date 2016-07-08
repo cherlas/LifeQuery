@@ -21,5 +21,4 @@ An android app named LQ
            "supplier": "移动 ",
            "province": 省份,
            "city": 城市,
-           "suit": "152卡"
-		  
+           "suit": "152卡
