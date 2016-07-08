@@ -25,12 +25,12 @@ public class HttpUtil {
                     InputStream is=connection.getInputStream();
                     BufferedReader reader=new BufferedReader(new InputStreamReader(is,"UTF-8"));
                     String line=null;
-                    final StringBuffer response=new StringBuffer();
+                    final StringBuffer response=new StringBuffer("[");
                     while ((line=reader.readLine())!=null){
                         response.append(line);
                     }
                     if (listener!=null){
-                        listener.onFinish(response.toString());
+                        listener.onFinish(response.append("]").toString());
                     }
                 }catch (Exception e){
                     if (listener!=null){
