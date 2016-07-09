@@ -60,12 +60,13 @@ public class Utilty {
             if (object.getString("retMsg").equals("success")){
                 JSONObject retData=object.getJSONObject("retData");
                 SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
-                editor.putString("phone",retData.getString("phone"));
-                editor.putString("prefix",retData.getString("prefix"));
-                editor.putString("supplier",retData.getString("supplier"));
-                editor.putString("province",retData.getString("province"));
-                editor.putString("city",retData.getString("city"));
-                editor.putString("suit",retData.getString("suit"));
+                StringBuffer stringBuffer=new StringBuffer();
+                stringBuffer.append("   手机号码: ").append(retData.getString("phone")).append("\n")
+                            .append("手机号前七位: ").append(retData.getString("prefix")).append("\n")
+                            .append(  "手机运营商: ").append(retData.getString("supplier")).append("\n")
+                            .append("  手机归属地: ").append(retData.getString("province")).append("·").append(retData.getString("city")).append("\n")
+                            .append("    卡号类别: ").append(retData.getString("suit"));
+                editor.putString("result",stringBuffer.toString());
                 editor.commit();
                 return true;
             }
