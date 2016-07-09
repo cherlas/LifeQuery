@@ -13,45 +13,51 @@ import org.json.JSONObject;
 public class Utilty {
 
     public static boolean parseShares(Context context,JSONObject object) {
-
+        return false;
     }
 
     public static boolean parseExpress(Context context,JSONObject object) {
-
+        return false;
     }
 
     public static boolean parseTrainTickets(Context context,JSONObject object) {
-
+        return false;
     }
 
     public static boolean parseTrademark(Context context,JSONObject object) {
-
+        return false;
     }
 
     public static boolean parseExchangeRate(Context context,JSONObject object) {
-
+        return false;
     }
 
     public static boolean parseAppleIMEINumber(Context context,JSONObject object) {
+        return false;
     }
 
     public static boolean parseAttractionsTicketsPrice(Context context,JSONObject object) {
+        return false;
     }
 
     public static boolean parsePerpetualCalendar(Context context,JSONObject object) {
-
+        return false;
     }
 
     public static boolean parseAppleSerialNumber(Context context,JSONObject object) {
+        return false;
     }
 
     public static boolean parseBankCard(Context context,JSONObject object) {
+        return false;
     }
 
     public static boolean parseZipCode(Context context,JSONObject object) {
+        return false;
     }
 
     public static boolean parseIpAddress(Context context,JSONObject object) {
+        return false;
     }
 
     public static boolean parsePhoneNumberOwnership(Context context, JSONObject object) throws JSONException {
