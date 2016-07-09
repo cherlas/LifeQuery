@@ -12,46 +12,46 @@ import org.json.JSONObject;
  */
 public class Utilty {
 
-    public static boolean parseShares(JSONObject object) {
+    public static boolean parseShares(Context context,JSONObject object) {
 
     }
 
-    public static boolean parseExpress(JSONObject object) {
+    public static boolean parseExpress(Context context,JSONObject object) {
 
     }
 
-    public static boolean parseTrainTickets(JSONObject object) {
+    public static boolean parseTrainTickets(Context context,JSONObject object) {
 
     }
 
-    public static boolean parseTrademark(JSONObject object) {
+    public static boolean parseTrademark(Context context,JSONObject object) {
 
     }
 
-    public static boolean parseExchangeRate(JSONObject object) {
+    public static boolean parseExchangeRate(Context context,JSONObject object) {
 
     }
 
-    public static boolean parseAppleIMEINumber(JSONObject object) {
+    public static boolean parseAppleIMEINumber(Context context,JSONObject object) {
     }
 
-    public static boolean parseAttractionsTicketsPrice(JSONObject object) {
+    public static boolean parseAttractionsTicketsPrice(Context context,JSONObject object) {
     }
 
-    public static boolean parsePerpetualCalendar(JSONObject object) {
+    public static boolean parsePerpetualCalendar(Context context,JSONObject object) {
 
     }
 
-    public static boolean parseAppleSerialNumber(JSONObject object) {
+    public static boolean parseAppleSerialNumber(Context context,JSONObject object) {
     }
 
-    public static boolean parseBankCard(JSONObject object) {
+    public static boolean parseBankCard(Context context,JSONObject object) {
     }
 
-    public static boolean parseZipCode(JSONObject object) {
+    public static boolean parseZipCode(Context context,JSONObject object) {
     }
 
-    public static boolean parseIpAddress(JSONObject object) {
+    public static boolean parseIpAddress(Context context,JSONObject object) {
     }
 
     public static boolean parsePhoneNumberOwnership(Context context, JSONObject object) throws JSONException {
