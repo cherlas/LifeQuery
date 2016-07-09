@@ -2,17 +2,27 @@ package com.weather.yogurt.lifequery.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.weather.yogurt.lifequery.R;
+import com.weather.yogurt.lifequery.database.QueryDataBase;
+import com.weather.yogurt.lifequery.model.TelephoneNumberOwnership;
 import com.weather.yogurt.lifequery.util.HttpCallbackListener;
 import com.weather.yogurt.lifequery.util.HttpUtil;
+import com.weather.yogurt.lifequery.util.Utilty;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Yogurt on 16/7/8.
@@ -20,14 +30,23 @@ import org.json.JSONObject;
 public class ShowInformationActivity extends Activity {
     private String chooseItem;
     private String inputContent;
+
+    private TextView showInformationText;
     private boolean isCancelDialog=false;
     private Dialog dialog;
+
+    Context context=ShowInformationActivity.this;
+
+    private final SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    QueryDataBase dataBase=QueryDataBase.getInstance(context);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_information_activity_layout);
 
-
+        showInformationText= (TextView) findViewById(R.id.showInformationText);
 
         Intent intentFromMainInterface=getIntent();
         if (intentFromMainInterface!=null){
@@ -110,45 +129,65 @@ public class ShowInformationActivity extends Activity {
         public void onFinish(String result) throws JSONException {
             JSONArray jsonArray=new JSONArray(result);
             JSONObject object=jsonArray.getJSONObject(0);
+            boolean isSuccessful;
             switch (chooseItem){
+
                 case "电话归属地":
-                    parsePhoneNumberOwnership(object);
+                    TelephoneNumberOwnership ownership=new TelephoneNumberOwnership();
+                    ownership.setTelephoneNumber(inputContent);
+                    ownership.setSearchDate(format.format(new Date()));
+                    dataBase.saveTelephoneNumberOwnershipInformation(ownership);
+                    cancelDialog();
+                    isSuccessful=Utilty.parsePhoneNumberOwnership(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "IP地址":
-                    parseIpAddress(object);
+                    isSuccessful=Utilty.parseIpAddress(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "邮编":
-                    parseZipCode(object);
+                    isSuccessful=Utilty.parseZipCode(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "银行卡":
-                    parseBankCard(object);
+                    isSuccessful=Utilty.parseBankCard(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "苹果序列号":
-                    parseAppleSerialNumber(object);
+                    isSuccessful=Utilty.parseAppleSerialNumber(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "苹果IMEI":
-                    parseAppleIMEINumber(object);
+                    isSuccessful=Utilty.parseAppleIMEINumber(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "汇率":
-                    parseExchangeRate(object);
+                    isSuccessful=Utilty.parseExchangeRate(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "快递":
-                    parseExpress(object);
+                    isSuccessful=Utilty.parseExpress(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "股票":
-                    parseShares(object);
+                    isSuccessful=Utilty.parseShares(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "火车票":
-                    parseTrainTickets(object);
+                    isSuccessful=Utilty.parseTrainTickets(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "商标":
-                    parseTrademark(object);
+                    isSuccessful=Utilty.parseTrademark(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "景点门票":
-                    parseAttractionsTicketsPrice(object);
+                    isSuccessful=Utilty.parseAttractionsTicketsPrice(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "万年历":
-                    parsePerpetualCalendar(object);
+                    isSuccessful=Utilty.parsePerpetualCalendar(context,object);
+                    dismissDialogAndShowInformation(isSuccessful);
                     break;
             }
         }
@@ -158,61 +197,26 @@ public class ShowInformationActivity extends Activity {
         }
     };
 
-    private void parseShares(JSONObject object) {
-
-    }
-
-    private void parseExpress(JSONObject object) {
-
-    }
-
-    private void parseTrainTickets(JSONObject object) {
-
-    }
-
-    private void parseTrademark(JSONObject object) {
-
-    }
-
-    private void parseExchangeRate(JSONObject object) {
-
-    }
-
-    private void parseAppleIMEINumber(JSONObject object) {
-    }
-
-    private void parseAttractionsTicketsPrice(JSONObject object) {
-    }
-
-    private void parsePerpetualCalendar(JSONObject object) {
-
-    }
-
-    private void parseAppleSerialNumber(JSONObject object) {
-    }
-
-    private void parseBankCard(JSONObject object) {
-    }
-
-    private void parseZipCode(JSONObject object) {
-    }
-
-    private void parseIpAddress(JSONObject object) {
-    }
-
-    private void parsePhoneNumberOwnership(JSONObject object) throws JSONException {
-        String errNum=object.getString("errNum");
-        if (errNum.equals("0")){
-
-        }else if (errNum.equals("-1")){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    makeToast();
-                }
-            });
+    private void dismissDialogAndShowInformation(boolean isSuccessful) {
+        cancelDialog();
+        if (isSuccessful){
+            showInformattion();
+        }else {
+            makeToast();
         }
     }
+
+    private void showInformattion() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(context);
+                String result=prefs.getString("result","");
+                showInformationText.setText(result);
+            }
+        });
+    }
+
 
     private void makeToast() {
         Toast.makeText(ShowInformationActivity.this,"查询失败",Toast.LENGTH_SHORT).show();
