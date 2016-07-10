@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -27,6 +28,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
     private Spinner spinnerChooseItem;
     private EditText searchContent;
     private SwipeMenuListView swipeMenuListView;
+    private QueryDataBase queryDataBase=QueryDataBase.getInstance(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +42,23 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerChooseItem.setAdapter(arrayAdapter);
 
+        //spinner 点击监听
+        spinnerChooseItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                listViewAdapter();
+            }
+        });
+
         searchContent= (EditText) findViewById(R.id.search_content);
 
         //点击搜索按钮事件
         ImageButton search= (ImageButton) findViewById(R.id.search_button);
         search.setOnClickListener(this);
 
+        //listView的adapter
+
+        listViewAdapter();
 
         //swipMenuListView
         SwipeMenuCreator creator=new SwipeMenuCreator() {
@@ -66,6 +79,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
             }
         };
         swipeMenuListView.setMenuCreator(creator);
+
         //click listener
         swipeMenuListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
@@ -82,6 +96,21 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
 
     }
 
+    private void listViewAdapter() {
+        List<String> swipeListViewArr=getDatabaseSavedInformation();
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,swipeListViewArr);
+        swipeMenuListView.setAdapter(adapter);
+    }
+
+    private List<String> getDatabaseSavedInformation() {
+        String[] tableNameKeyWordKey=getTableNameKeyWordKey();
+        String tableName=tableNameKeyWordKey[0];
+        String keyWord=tableNameKeyWordKey[1];
+        String order=tableNameKeyWordKey[3];
+        List<String> res=queryDataBase.queryInformationFromDatabase(tableName,keyWord,order);
+        return res;
+    }
+
     private void deleteDatabaseInformation() {
 
         String[] tableNameKeyWordKey=getTableNameKeyWordKey();
@@ -89,70 +118,82 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         String keyWord=tableNameKeyWordKey[1];
         String key=tableNameKeyWordKey[2];
 
-        QueryDataBase queryDataBase=QueryDataBase.getInstance(this);
         queryDataBase.deleteDatabaseInformation(tableName,keyWord,key);
     }
 
     private String[] getTableNameKeyWordKey() {
         String tableName="";
         String keyWord="";
-        String key;
+        String key,order="";
         switch ((String)spinnerChooseItem.getSelectedItem()){
             case "电话归属地":
                 tableName="TelephoneHomeOwnership";
                 keyWord="telephone_number";
+                order="telephone_search_date";
                 break;
             case "IP地址":
                 tableName="IpAddress";
                 keyWord="ip_address";
+                order="ip_address_search_date";
                 break;
             case "邮编":
                 tableName="ZipCode";
                 keyWord="zip_code_number";
+                order="zip_code_search_date";
                 break;
             case "银行卡":
                 tableName="BankCard";
                 keyWord="bank_card_number";
+                order="bank_card_search_date";
                 break;
             case "苹果序列号":
                 tableName="AppleSerialNumber";
                 keyWord="apple_serial_number";
+                order="apple_serial_number_search_date";
                 break;
             case "苹果IMEI":
                 tableName="AppleIMEINumber";
                 keyWord="apple_imei_number";
+                order="apple_imei_number_search_date";
                 break;
             case "汇率":
                 tableName="ExchangeRate";
                 keyWord="exchange_rate";
+                order="exchange_rate_search_date";
                 break;
             case "快递":
                 tableName="Express";
                 keyWord="express_number";
+                order="express_search_date";
                 break;
             case "股票":
                 tableName="Shares";
                 keyWord="shares";
+                order="shares_search_date";
                 break;
             case "火车票":
                 tableName="TrainTickets";
                 keyWord="train_tickets_number";
+                order="train_tickets_search_date";
                 break;
             case "商标":
                 tableName="Trademark";
                 keyWord="trademark";
+                order="trademark_search_date";
                 break;
             case "景点门票":
                 tableName="AttractionsTickets";
                 keyWord="attractions_name";
+                order="attractions_search_date";
                 break;
             case "万年历":
                 tableName="PerpetualCalendar";
                 keyWord="perpetual_calendar";
+                order="perpetual_calendar_search_date";
                 break;
         }
         key=String.valueOf(searchContent.getText());
-        return new String[]{tableName,keyWord,key};
+        return new String[]{tableName,keyWord,key,order};
     }
 
     @Override
