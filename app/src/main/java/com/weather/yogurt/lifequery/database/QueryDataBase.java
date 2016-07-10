@@ -2,6 +2,7 @@ package com.weather.yogurt.lifequery.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.weather.yogurt.lifequery.model.AppleIMEINumber;
@@ -17,6 +18,9 @@ import com.weather.yogurt.lifequery.model.TelephoneNumberOwnership;
 import com.weather.yogurt.lifequery.model.Trademark;
 import com.weather.yogurt.lifequery.model.TrainTickets;
 import com.weather.yogurt.lifequery.model.ZipCode;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Yogurt on 16/7/3.
@@ -178,5 +182,17 @@ public class QueryDataBase {
 
     public void deleteDatabaseInformation(String tableName,String keyWord,String key){
         db.delete(tableName,"where "+keyWord+"=?",new String[]{key});
+    }
+
+    //查询
+    public List<String> queryInformationFromDatabase(String tableName, String keyWord, String order){
+        Cursor cursor=db.query(tableName,new String[]{keyWord},null,null,null,null,order);
+        List<String> res=new LinkedList<>();
+        cursor.moveToFirst();
+        while (!cursor.isLast()){
+            res.add(cursor.getString(cursor.getColumnIndex(keyWord)));
+            cursor.moveToNext();
+        }
+        return res;
     }
 }
