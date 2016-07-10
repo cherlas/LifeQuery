@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -17,11 +18,9 @@ import com.baoyz.SwipeMenuListView.SwipeMenuCreator;
 import com.baoyz.SwipeMenuListView.SwipeMenuItem;
 import com.baoyz.SwipeMenuListView.SwipeMenuListView;
 import com.weather.yogurt.lifequery.R;
-import com.weather.yogurt.lifequery.model.TelephoneNumberOwnership;
-import com.weather.yogurt.lifequery.util.Utilty;
+import com.weather.yogurt.lifequery.database.QueryDataBase;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class MainInterface extends AppCompatActivity implements View.OnClickListener{
@@ -84,48 +83,76 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
     }
 
     private void deleteDatabaseInformation() {
-        String tableName;
+
+        String[] tableNameKeyWordKey=getTableNameKeyWordKey();
+        String tableName=tableNameKeyWordKey[0];
+        String keyWord=tableNameKeyWordKey[1];
+        String key=tableNameKeyWordKey[2];
+
+        QueryDataBase queryDataBase=QueryDataBase.getInstance(this);
+        queryDataBase.deleteDatabaseInformation(tableName,keyWord,key);
+    }
+
+    private String[] getTableNameKeyWordKey() {
+        String tableName="";
+        String keyWord="";
+        String key;
         switch ((String)spinnerChooseItem.getSelectedItem()){
             case "电话归属地":
-                tableName=
+                tableName="TelephoneHomeOwnership";
+                keyWord="telephone_number";
                 break;
             case "IP地址":
-
+                tableName="IpAddress";
+                keyWord="ip_address";
                 break;
             case "邮编":
-
+                tableName="ZipCode";
+                keyWord="zip_code_number";
                 break;
             case "银行卡":
-
+                tableName="BankCard";
+                keyWord="bank_card_number";
                 break;
             case "苹果序列号":
-
+                tableName="AppleSerialNumber";
+                keyWord="apple_serial_number";
                 break;
             case "苹果IMEI":
-
+                tableName="AppleIMEINumber";
+                keyWord="apple_imei_number";
                 break;
             case "汇率":
-
+                tableName="ExchangeRate";
+                keyWord="exchange_rate";
                 break;
             case "快递":
-
+                tableName="Express";
+                keyWord="express_number";
                 break;
             case "股票":
-
+                tableName="Shares";
+                keyWord="shares";
                 break;
             case "火车票":
-
+                tableName="TrainTickets";
+                keyWord="train_tickets_number";
                 break;
             case "商标":
-
+                tableName="Trademark";
+                keyWord="trademark";
                 break;
             case "景点门票":
-
+                tableName="AttractionsTickets";
+                keyWord="attractions_name";
                 break;
             case "万年历":
-
+                tableName="PerpetualCalendar";
+                keyWord="perpetual_calendar";
                 break;
         }
+        key=String.valueOf(searchContent.getText());
+        return new String[]{tableName,keyWord,key};
     }
 
     @Override
@@ -144,5 +171,10 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
                 break;
         }
 
+    }
+
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
     }
 }
