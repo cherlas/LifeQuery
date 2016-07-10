@@ -176,5 +176,7 @@ public class QueryDataBase {
         }
     }
 
-
+    public void deleteDatabaseInformation(String tableName,String keyWord,String key){
+        db.delete(tableName,"where "+keyWord+"=?",new String[]{key});
+    }
 }
