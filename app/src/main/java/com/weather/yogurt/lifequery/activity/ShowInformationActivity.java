@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,14 +33,16 @@ public class ShowInformationActivity extends Activity {
     private String inputContent;
 
     private TextView showInformationText;
+
     private boolean isCancelDialog=false;
+
     private ProgressDialog dialog;
 
     Context context=ShowInformationActivity.this;
 
     private final SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    QueryDataBase dataBase=QueryDataBase.getInstance(context);
+    QueryDataBase dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class ShowInformationActivity extends Activity {
                 requestInformation();
             }
         }
+        dataBase=QueryDataBase.getInstance(this);
     }
 
     private void requestInformation() {
@@ -112,16 +116,26 @@ public class ShowInformationActivity extends Activity {
     //显示Dialog
     private void showDialog(){
         if (dialog!=null){
-            dialog=new ProgressDialog(this);
-            dialog.setMessage("正在查询...");
-            dialog.setCanceledOnTouchOutside(false);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog=new ProgressDialog(ShowInformationActivity.this);
+                    dialog.setMessage("正在查询...");
+                    dialog.setCanceledOnTouchOutside(false);
+                }
+            });
         }
     }
 
     //取消Dialog
     private void cancelDialog(){
         if (dialog!=null&&isCancelDialog){
-            dialog.dismiss();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.dismiss();
+                }
+            });
         }
 
     }
@@ -129,6 +143,7 @@ public class ShowInformationActivity extends Activity {
     HttpCallbackListener listener=new HttpCallbackListener() {
         @Override
         public void onFinish(String result) throws JSONException {
+            Log.d("ShowActivity",result);
             JSONArray jsonArray=new JSONArray(result);
             JSONObject object=jsonArray.getJSONObject(0);
             boolean isSuccessful;
@@ -205,6 +220,7 @@ public class ShowInformationActivity extends Activity {
             showInformattion();
         }else {
             makeToast();
+            onDestroy();
         }
     }
 
