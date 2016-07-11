@@ -38,8 +38,9 @@ public class QueryDataBase {
 
     private static QueryDataBase queryDB;
     private SQLiteDatabase db;
+    private QueryDatabaseOpenHelper dbHelper;
     private QueryDataBase(Context context){
-        QueryDatabaseOpenHelper dbHelper=new QueryDatabaseOpenHelper(context,DB_NAME,null,VERSION);
+        dbHelper=new QueryDatabaseOpenHelper(context,DB_NAME,null,VERSION);
         db=dbHelper.getWritableDatabase();
     }
 
@@ -181,16 +182,17 @@ public class QueryDataBase {
     }
 
     public void deleteDatabaseInformation(String tableName,String keyWord,String key){
-        db.delete(tableName,"where "+keyWord+"=?",new String[]{key});
+        db.delete(tableName,keyWord+"=?",new String[]{key});
     }
 
     //查询
     public List<String> queryInformationFromDatabase(String tableName, String keyWord, String order){
-        Cursor cursor=db.query(tableName,new String[]{keyWord},null,null,null,null,order);
+        Cursor cursor=db.query(tableName,new String[]{keyWord,order},null,null,null,null,order);
         List<String> res=new LinkedList<>();
+        if (cursor.getCount()==0) return res;
         cursor.moveToFirst();
         while (!cursor.isLast()){
-            res.add(cursor.getString(cursor.getColumnIndex(keyWord)));
+            res.add("      "+cursor.getString(cursor.getColumnIndex(order)).substring(5)+"      "+cursor.getString(cursor.getColumnIndex(keyWord)));
             cursor.moveToNext();
         }
         return res;
