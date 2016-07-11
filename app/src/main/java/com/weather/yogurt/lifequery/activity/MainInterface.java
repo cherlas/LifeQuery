@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,7 +32,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
 
     private SwipeMenuListView swipeMenuListView;
 
-    private QueryDataBase queryDataBase=QueryDataBase.getInstance(this);
+    private QueryDataBase dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,20 +40,34 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.main_interface);
         spinnerChooseItem= (Spinner) findViewById(R.id.spinner_choose_item);
         swipeMenuListView= (SwipeMenuListView) findViewById(R.id.history_record);
+
+        dataBase =QueryDataBase.getInstance(this);
+
         //spinner drop down data;
         Resources resources=getResources();
         List<String> spinnerDropDownData= Arrays.asList(resources.getStringArray(R.array.spinner_drop_down_item));
-        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,spinnerDropDownData);
+        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,spinnerDropDownData);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerChooseItem.setAdapter(arrayAdapter);
 
         //spinner 点击监听
-        spinnerChooseItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spinnerChooseItem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 listViewAdapter();
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
+//        spinnerChooseItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                listViewAdapter();
+//            }
+//        });
 
         searchContent= (EditText) findViewById(R.id.search_content);
 
@@ -63,7 +78,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         //listView的adapter
         listViewAdapter();
 
-        //swipMenuListView
+        //swipeMenuListView
         SwipeMenuCreator creator=new SwipeMenuCreator() {
             @Override
             public void create(SwipeMenu menu) {
@@ -74,7 +89,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
                 deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
                         0x3F, 0x25)));
                 // set item width
-                deleteItem.setWidth(dp2px(90));
+                deleteItem.setWidth(dp2px(60));
                 // set a icon
                 deleteItem.setIcon(R.drawable.ic_delete);
                 // add to menu
@@ -84,6 +99,13 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         swipeMenuListView.setMenuCreator(creator);
 
         //click listener
+        swipeMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String phoneNumber= view.getTransitionName();
+                Log.d("phone",phoneNumber);
+            }
+        });
         swipeMenuListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
@@ -101,7 +123,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
 
     private void listViewAdapter() {
         List<String> swipeListViewArr=getDatabaseSavedInformation();
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,swipeListViewArr);
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,swipeListViewArr);
         swipeMenuListView.setAdapter(adapter);
     }
 
@@ -110,7 +132,8 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         String tableName=tableNameKeyWordKey[0];
         String keyWord=tableNameKeyWordKey[1];
         String order=tableNameKeyWordKey[3];
-        List<String> res=queryDataBase.queryInformationFromDatabase(tableName,keyWord,order);
+
+        List<String> res= dataBase.queryInformationFromDatabase(tableName,keyWord,order);
         return res;
     }
 
@@ -121,7 +144,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         String keyWord=tableNameKeyWordKey[1];
         String key=tableNameKeyWordKey[2];
 
-        queryDataBase.deleteDatabaseInformation(tableName,keyWord,key);
+        dataBase.deleteDatabaseInformation(tableName,keyWord,key);
     }
 
     private String[] getTableNameKeyWordKey() {
