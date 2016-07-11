@@ -26,9 +26,13 @@ import java.util.List;
 
 public class MainInterface extends AppCompatActivity implements View.OnClickListener{
     private Spinner spinnerChooseItem;
+
     private EditText searchContent;
+
     private SwipeMenuListView swipeMenuListView;
+
     private QueryDataBase queryDataBase=QueryDataBase.getInstance(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +61,6 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         search.setOnClickListener(this);
 
         //listView的adapter
-
         listViewAdapter();
 
         //swipMenuListView
