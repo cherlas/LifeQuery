@@ -1,7 +1,7 @@
 package com.weather.yogurt.lifequery.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,7 +33,7 @@ public class ShowInformationActivity extends Activity {
 
     private TextView showInformationText;
     private boolean isCancelDialog=false;
-    private Dialog dialog;
+    private ProgressDialog dialog;
 
     Context context=ShowInformationActivity.this;
 
@@ -112,7 +112,9 @@ public class ShowInformationActivity extends Activity {
     //显示Dialog
     private void showDialog(){
         if (dialog!=null){
-            dialog=new Dialog(this);
+            dialog=new ProgressDialog(this);
+            dialog.setMessage("正在查询...");
+            dialog.setCanceledOnTouchOutside(false);
         }
     }
 
