@@ -23,7 +23,8 @@ public class HttpUtil {
                     connection.setRequestMethod("GET");
                     connection.setConnectTimeout(8000);
                     connection.setReadTimeout(8000);
-                    connection.setRequestProperty("apikey",apiKey);
+                    if (!apiKey.equals(""))
+                        connection.setRequestProperty("apikey",apiKey);
                     InputStream is=connection.getInputStream();
                     BufferedReader reader=new BufferedReader(new InputStreamReader(is,"UTF-8"));
                     String line=null;
