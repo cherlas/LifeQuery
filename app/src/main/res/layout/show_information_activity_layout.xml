@@ -9,9 +9,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp"
         android:id="@+id/showInformationText"
-        android:textSize="18dp"/>
+        android:textSize="16dp"/>
 </ScrollView>
 </LinearLayout>
