@@ -67,11 +67,11 @@ public class Utilty {
                 JSONObject retData=object.getJSONObject("retData");
                 SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
                 StringBuffer stringBuffer=new StringBuffer();
-                stringBuffer.append("   手机号码: ").append(retData.getString("phone")).append("\n")
-                            .append("手机号前七位: ").append(retData.getString("prefix")).append("\n")
-                            .append(  "手机运营商: ").append(retData.getString("supplier")).append("\n")
-                            .append("  手机归属地: ").append(retData.getString("province")).append("·").append(retData.getString("city")).append("\n")
-                            .append("    卡号类别: ").append(retData.getString("suit"));
+                stringBuffer.append("手机号码: ").append(retData.getString("phone")).append("\r\n")
+                            .append("手机号前七位: ").append(retData.getString("prefix")).append("\r\n")
+                            .append("手机运营商: ").append(retData.getString("supplier")).append("\r\n")
+                            .append("手机归属地: ").append(retData.getString("province")).append("·").append(retData.getString("city")).append("\r\n")
+                            .append("卡号类别: ").append(retData.getString("suit"));
                 editor.putString("result",stringBuffer.toString());
                 editor.commit();
                 return true;
