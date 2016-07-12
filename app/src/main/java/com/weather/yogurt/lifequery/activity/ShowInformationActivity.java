@@ -66,6 +66,7 @@ public class ShowInformationActivity extends Activity {
 
     private void requestInformation() {
         String searchAddress="";
+        String apiKey="dc4d191ee8f9eb877e74ebf2643958cc";
         switch (chooseItem){
             case "电话归属地": //http://apistore.baidu.com/apiworks/servicedetail/794.html
                 searchAddress="http://apis.baidu.com/apistore/mobilenumber/mobilenumber?"+inputContent;
@@ -76,6 +77,7 @@ public class ShowInformationActivity extends Activity {
             case "邮编"://http://avatardata.cn/Docs/Api/b3d25cbd-449d-41c3-8765-21649658789e
                 searchAddress="http://api.avatardata.cn/PostNumber/QueryPostnumber?key=[您申请的APPKEY]&postnumber="
                         +inputContent+"&page=1&rows=15?";
+                apiKey="";
                 break;
             case "银行卡"://http://apistore.baidu.com/apiworks/servicedetail/735.html
                 searchAddress="http://apis.baidu.com/datatiny/cardinfo/cardinfo"+inputContent;
@@ -110,7 +112,7 @@ public class ShowInformationActivity extends Activity {
                 searchAddress="http://apis.baidu.com/apistore/mobilenumber/mobilenumber?"+inputContent;
                 break;
         }
-        HttpUtil.sendHttpRequest(searchAddress,listener);
+        HttpUtil.sendHttpRequest(searchAddress,listener,apiKey);
     }
 
     //显示Dialog
@@ -236,15 +238,21 @@ public class ShowInformationActivity extends Activity {
     }
 
 
-    private void makeToast() {
-        Toast.makeText(ShowInformationActivity.this,"查询失败",Toast.LENGTH_SHORT).show();
+    public void makeToast() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(ShowInformationActivity.this,"查询失败",Toast.LENGTH_SHORT).show();
+            }
+        });
+
         onBackPressed();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        ShowInformationActivity.this.finish();
     }
 }
 
