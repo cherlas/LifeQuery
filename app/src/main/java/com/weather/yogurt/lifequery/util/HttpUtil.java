@@ -1,7 +1,5 @@
 package com.weather.yogurt.lifequery.util;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -30,9 +28,11 @@ public class HttpUtil {
                     String line=null;
                     final StringBuffer response=new StringBuffer("[");
                     while ((line=reader.readLine())!=null){
-                        response.append(line);
+                        response.append(line).append("\r\n");
                     }
-                    Log.d("HttpUtil",response.toString());
+                   // Log.d("HttpUtil",response.toString());
+                    reader.close();
+                    is.close();
                     if (listener!=null){
                         listener.onFinish(response.append("]").toString());
                     }
