@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.weather.yogurt.lifequery.R;
 import com.weather.yogurt.lifequery.database.QueryDataBase;
-import com.weather.yogurt.lifequery.model.TelephoneNumberOwnership;
 import com.weather.yogurt.lifequery.util.HttpCallbackListener;
 import com.weather.yogurt.lifequery.util.HttpUtil;
 import com.weather.yogurt.lifequery.util.Utilty;
@@ -23,7 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Yogurt on 16/7/8.
@@ -153,48 +151,43 @@ public class ShowInformationActivity extends Activity {
             switch (chooseItem){
 
                 case "电话归属地":
-                    TelephoneNumberOwnership ownership=new TelephoneNumberOwnership();
-                    ownership.setTelephoneNumber(inputContent);
-                    ownership.setSearchDate(format.format(new Date()));
-                    dataBase.saveTelephoneNumberOwnershipInformation(ownership);
-                    cancelDialog();
-                    isSuccessful=Utilty.parsePhoneNumberOwnership(context,object);
+                    isSuccessful=Utilty.parsePhoneNumberOwnership(context,object,inputContent,dataBase);
                     break;
                 case "IP地址":
-                    isSuccessful=Utilty.parseIpAddress(context,object);
+                    isSuccessful=Utilty.parseIpAddress(context,object,inputContent,dataBase);
                     break;
                 case "邮编":
-                    isSuccessful=Utilty.parseZipCode(context,object);
+                    isSuccessful=Utilty.parseZipCode(context,object,inputContent,dataBase);
                     break;
                 case "银行卡":
-                    isSuccessful=Utilty.parseBankCard(context,object);
+                    isSuccessful=Utilty.parseBankCard(context,object,inputContent,dataBase);
                     break;
                 case "苹果序列号":
-                    isSuccessful=Utilty.parseAppleSerialNumber(context,object);
+                    isSuccessful=Utilty.parseAppleSerialNumber(context,object,inputContent,dataBase);
                     break;
                 case "苹果IMEI":
-                    isSuccessful=Utilty.parseAppleIMEINumber(context,object);
+                    isSuccessful=Utilty.parseAppleIMEINumber(context,object,inputContent,dataBase);
                     break;
                 case "汇率":
-                    isSuccessful=Utilty.parseExchangeRate(context,object);
+                    isSuccessful=Utilty.parseExchangeRate(context,object,inputContent,dataBase);
                     break;
                 case "快递":
-                    isSuccessful=Utilty.parseExpress(context,object);
+                    isSuccessful=Utilty.parseExpress(context,object,inputContent,dataBase);
                     break;
                 case "股票":
-                    isSuccessful=Utilty.parseShares(context,object);
+                    isSuccessful=Utilty.parseShares(context,object,inputContent,dataBase);
                     break;
                 case "火车票":
-                    isSuccessful=Utilty.parseTrainTickets(context,object);
+                    isSuccessful=Utilty.parseTrainTickets(context,object,inputContent,dataBase);
                     break;
                 case "商标":
-                    isSuccessful=Utilty.parseTrademark(context,object);
+                    isSuccessful=Utilty.parseTrademark(context,object,inputContent,dataBase);
                     break;
                 case "景点门票":
-                    isSuccessful=Utilty.parseAttractionsTicketsPrice(context,object);
+                    isSuccessful=Utilty.parseAttractionsTicketsPrice(context,object,inputContent,dataBase);
                     break;
                 case "万年历":
-                    isSuccessful=Utilty.parsePerpetualCalendar(context,object);
+                    isSuccessful=Utilty.parsePerpetualCalendar(context,object,inputContent,dataBase);
 
                     break;
             }
@@ -241,6 +234,7 @@ public class ShowInformationActivity extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        setResult(1);
         ShowInformationActivity.this.finish();
     }
 
