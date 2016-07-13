@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
@@ -54,6 +53,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         spinnerChooseItem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                searchContent.setText("");
                 listViewAdapter();
             }
 
@@ -102,8 +102,9 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         swipeMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String phoneNumber= view.getTransitionName();
-                Log.d("phone",phoneNumber);
+                String data= (String) swipeMenuListView.getItemAtPosition(position);
+                String searchData=data.substring(data.lastIndexOf(" ")+1);
+                searchContent.setText(searchData);
             }
         });
         swipeMenuListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
@@ -243,5 +244,22 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
     private int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode){
+            case 1: searchContent.setText((CharSequence) searchContent);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeMenuListView.notify();
+                    }
+                });
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
