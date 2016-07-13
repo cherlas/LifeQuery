@@ -64,7 +64,42 @@ public class Utilty {
         return false;
     }
 
-    public static boolean parseIpAddress(Context context, JSONObject object, String inputContent, QueryDataBase dataBase) {
+    public static boolean parseIpAddress(Context context, JSONObject object, String inputContent, QueryDataBase dataBase) throws JSONException {
+        String errNum=object.getString("errNum");
+        if (errNum.equals("0")){
+            TelephoneNumberOwnership ownership=new TelephoneNumberOwnership();
+            ownership.setTelephoneNumber(inputContent);
+            ownership.setSearchDate(format.format(new Date()));
+            dataBase.saveTelephoneNumberOwnershipInformation(ownership);
+            if (object.getString("retMsg").equals("success")){
+                JSONObject retData=object.getJSONObject("retData");
+                SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
+                StringBuffer stringBuffer=new StringBuffer();
+                stringBuffer.append("IP地址: ").append(retData.getString("ip")).append("\r\n")
+                        .append("国家: ").append(retData.getString("country")).append("\r\n");
+                String province=retData.getString("province");
+                String city=retData.getString("city");
+                String district=retData.getString("district");
+                if (province.equals("none"))
+                    stringBuffer.append("国外省份").append("\r\n");
+                else stringBuffer.append(province).append("\r\n");
+
+                if (city.equals("none"))
+                    stringBuffer.append("国外城市").append("\r\n");
+                else stringBuffer.append(city).append("\r\n");
+
+                if (district.equals("none"))
+                    stringBuffer.append("国外地区").append("\r\n");
+                else stringBuffer.append(district).append("\r\n");
+
+                stringBuffer.append("运营商: ").append(retData.getString("carrier"));
+                editor.putString("result",stringBuffer.toString());
+                editor.commit();
+                return true;
+            }
+        }else if (errNum.equals("-1")){
+            return false;
+        }
         return false;
     }
 
