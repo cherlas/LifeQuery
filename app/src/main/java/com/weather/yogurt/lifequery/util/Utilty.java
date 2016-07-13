@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.weather.yogurt.lifequery.database.QueryDataBase;
+import com.weather.yogurt.lifequery.model.BankCard;
+import com.weather.yogurt.lifequery.model.IPAddress;
 import com.weather.yogurt.lifequery.model.TelephoneNumberOwnership;
 
 import org.json.JSONException;
@@ -56,7 +58,32 @@ public class Utilty {
         return false;
     }
 
-    public static boolean parseBankCard(Context context, JSONObject object, String inputContent, QueryDataBase dataBase) {
+    public static boolean parseBankCard(Context context, JSONObject object, String inputContent, QueryDataBase dataBase) throws JSONException {
+        String status=object.getString("status");
+        if (status.equals("1")){
+            BankCard bankCard=new BankCard();
+            bankCard.setBankCardNumber(inputContent);
+            bankCard.setSearchDate(format.format(new Date()));
+            dataBase.saveBankCardInformation(bankCard);
+            JSONObject retData=object.getJSONObject("data");
+            SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
+            StringBuffer stringBuffer=new StringBuffer();
+            stringBuffer.append("银行卡的类型: ").append(retData.getString("cardtype")).append("\r\n")
+                    .append("银行卡的长度: ").append(retData.getString("cardlength")).append("\r\n")
+                    .append("银行卡前缀: ").append(retData.getString("cardprefixnum")).append("\r\n")
+                    .append("银行卡名称: ").append(retData.getString("cardname")).append("·").append("\r\n")
+                    .append("归属银行: ").append(retData.getString("bankname")).append("\r\n")
+                    .append("内部结算代码: ").append(retData.getString("banknum"));
+            editor.putString("result",stringBuffer.toString());
+            editor.commit();
+            return true;
+
+        }else if (status.equals("-1")){
+            SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
+            editor.putString("result","无效的卡号");
+            editor.commit();
+            return true;
+        }
         return false;
     }
 
@@ -67,10 +94,10 @@ public class Utilty {
     public static boolean parseIpAddress(Context context, JSONObject object, String inputContent, QueryDataBase dataBase) throws JSONException {
         String errNum=object.getString("errNum");
         if (errNum.equals("0")){
-            TelephoneNumberOwnership ownership=new TelephoneNumberOwnership();
-            ownership.setTelephoneNumber(inputContent);
-            ownership.setSearchDate(format.format(new Date()));
-            dataBase.saveTelephoneNumberOwnershipInformation(ownership);
+            IPAddress ipAddress=new IPAddress();
+            ipAddress.setIpAddress(inputContent);
+            ipAddress.setSearchDate(format.format(new Date()));
+            dataBase.saveIpAddressInformation(ipAddress);
             if (object.getString("retMsg").equals("success")){
                 JSONObject retData=object.getJSONObject("retData");
                 SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
