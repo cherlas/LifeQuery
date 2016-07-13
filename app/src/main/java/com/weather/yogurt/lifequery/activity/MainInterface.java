@@ -33,6 +33,8 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
 
     private QueryDataBase dataBase;
 
+    private ArrayAdapter<String> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +115,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
                 switch (index){
                     case 0:
                         deleteDatabaseInformation();
-                        swipeMenuListView.notifyAll();
+                        //swipeMenuListView.notifyAll();
                         break;
                 }
                 return false;
@@ -124,8 +126,9 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
 
     private void listViewAdapter() {
         List<String> swipeListViewArr=getDatabaseSavedInformation();
-        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,swipeListViewArr);
+        adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,swipeListViewArr);
         swipeMenuListView.setAdapter(adapter);
+
     }
 
     private List<String> getDatabaseSavedInformation() {
@@ -146,6 +149,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         String key=tableNameKeyWordKey[2];
 
         dataBase.deleteDatabaseInformation(tableName,keyWord,key);
+        listViewAdapter();
     }
 
     private String[] getTableNameKeyWordKey() {
@@ -253,7 +257,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        swipeMenuListView.notify();
+                        adapter.notifyAll();
                     }
                 });
                 break;
