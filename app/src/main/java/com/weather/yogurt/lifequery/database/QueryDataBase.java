@@ -55,12 +55,26 @@ public class QueryDataBase {
     //存储电话归属地数据
     public void saveTelephoneNumberOwnershipInformation(TelephoneNumberOwnership telephoneNumberOwnership){
         if (telephoneNumberOwnership!=null){
-            ContentValues values=new ContentValues();
-            values.put("telephone_number",telephoneNumberOwnership.getTelephoneNumber());
-            values.put("telephone_search_date",telephoneNumberOwnership.getSearchDate());
-            db.insert("TelephoneHomeOwnership",null,values);
+            Cursor cursor=query("TelephoneHomeOwnership",telephoneNumberOwnership.getTelephoneNumber());
+            if (cursor.getCount()!=0){
+                ContentValues values=new ContentValues();
+                values.put("telephone_search_date",telephoneNumberOwnership.getSearchDate());
+                db.update("TelephoneHomeOwnership",values,"telephone_number=?",new String[]{telephoneNumberOwnership.getTelephoneNumber()});
+            }else {
+                ContentValues values=new ContentValues();
+                values.put("telephone_number",telephoneNumberOwnership.getTelephoneNumber());
+                values.put("telephone_search_date",telephoneNumberOwnership.getSearchDate());
+                db.insert("TelephoneHomeOwnership",null,values);
+            }
+
         }
     }
+
+    private Cursor query(String tableName, String telephoneNumber) {
+        Cursor cursor=db.query(tableName,new String[]{telephoneNumber},null,null,null,null,null);
+        return cursor;
+    }
+
     //ip地址
     public void saveIpAddressInformation(IPAddress ipAddress){
         if (ipAddress!=null){
