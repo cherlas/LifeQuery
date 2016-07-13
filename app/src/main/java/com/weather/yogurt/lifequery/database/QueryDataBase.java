@@ -190,11 +190,11 @@ public class QueryDataBase {
         Cursor cursor=db.query(tableName,new String[]{keyWord,order},null,null,null,null,order);
         List<String> res=new LinkedList<>();
         if (cursor.getCount()==0) return res;
-        cursor.moveToFirst();
-        while (!cursor.isLast()){
-            res.add("        "+cursor.getString(cursor.getColumnIndex(order))+"       "+cursor.getString(cursor.getColumnIndex(keyWord)));
-            cursor.moveToNext();
+        for (cursor.moveToLast();!cursor.isBeforeFirst();cursor.moveToPrevious()){
+            String data=cursor.getString(cursor.getColumnIndex(order))+"      "+cursor.getString(cursor.getColumnIndex(keyWord));
+            res.add(data);
         }
+        cursor.close();
         return res;
     }
 }
