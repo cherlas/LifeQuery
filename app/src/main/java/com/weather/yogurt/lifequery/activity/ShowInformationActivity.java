@@ -21,8 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-
 /**
  * Created by Yogurt on 16/7/8.
  */
@@ -32,13 +30,10 @@ public class ShowInformationActivity extends Activity {
 
     private TextView showInformationText;
 
-    private boolean isCancelDialog;
 
     private ProgressDialog dialog;
 
     Context context=ShowInformationActivity.this;
-
-    private final SimpleDateFormat format=new SimpleDateFormat("MM-dd HH:mm");
 
     QueryDataBase dataBase;
 
@@ -122,10 +117,10 @@ public class ShowInformationActivity extends Activity {
                     dialog=new ProgressDialog(ShowInformationActivity.this);
                     dialog.setMessage("正在查询...");
                     dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
                 }
             });
         }
+        dialog.show();
     }
 
     //取消Dialog
