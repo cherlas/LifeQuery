@@ -22,7 +22,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/search_content"
         android:layout_weight="3.8"
-        android:hint="Input the content..."/>
+        android:hint="input here..."
+        android:lines="1"/>
     <ImageButton
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -40,7 +41,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:id="@+id/history_record"/>
 
 
