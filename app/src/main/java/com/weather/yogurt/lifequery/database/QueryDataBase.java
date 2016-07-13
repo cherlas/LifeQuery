@@ -192,7 +192,7 @@ public class QueryDataBase {
         if (cursor.getCount()==0) return res;
         cursor.moveToFirst();
         while (!cursor.isLast()){
-            res.add("      "+cursor.getString(cursor.getColumnIndex(order)).substring(5)+"      "+cursor.getString(cursor.getColumnIndex(keyWord)));
+            res.add("        "+cursor.getString(cursor.getColumnIndex(order))+"       "+cursor.getString(cursor.getColumnIndex(keyWord)));
             cursor.moveToNext();
         }
         return res;
