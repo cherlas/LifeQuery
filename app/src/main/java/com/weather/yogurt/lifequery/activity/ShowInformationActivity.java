@@ -34,13 +34,13 @@ public class ShowInformationActivity extends Activity {
 
     private TextView showInformationText;
 
-    private boolean isCancelDialog=false;
+    private boolean isCancelDialog;
 
     private ProgressDialog dialog;
 
     Context context=ShowInformationActivity.this;
 
-    private final SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final SimpleDateFormat format=new SimpleDateFormat("MM-dd HH:mm");
 
     QueryDataBase dataBase;
 
@@ -69,7 +69,7 @@ public class ShowInformationActivity extends Activity {
         String apiKey="dc4d191ee8f9eb877e74ebf2643958cc";
         switch (chooseItem){
             case "电话归属地": //http://apistore.baidu.com/apiworks/servicedetail/794.html
-                searchAddress="http://apis.baidu.com/apistore/mobilenumber/mobilenumber?"+inputContent;
+                searchAddress="http://apis.baidu.com/apistore/mobilenumber/mobilenumber?phone="+inputContent;
                 break;
             case "IP地址": //http://apistore.baidu.com/apiworks/servicedetail/114.html
                 searchAddress="http://apis.baidu.com/apistore/iplookupservice/iplookup?"+inputContent;
@@ -117,13 +117,14 @@ public class ShowInformationActivity extends Activity {
 
     //显示Dialog
     private void showDialog(){
-        if (dialog!=null){
+        if (dialog==null){
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     dialog=new ProgressDialog(ShowInformationActivity.this);
                     dialog.setMessage("正在查询...");
                     dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
                 }
             });
         }
@@ -131,7 +132,7 @@ public class ShowInformationActivity extends Activity {
 
     //取消Dialog
     private void cancelDialog(){
-        if (dialog!=null&&isCancelDialog){
+        if (dialog!=null){
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -148,7 +149,7 @@ public class ShowInformationActivity extends Activity {
             Log.d("ShowActivity",result);
             JSONArray jsonArray=new JSONArray(result);
             JSONObject object=jsonArray.getJSONObject(0);
-            boolean isSuccessful;
+            boolean isSuccessful=true;
             switch (chooseItem){
 
                 case "电话归属地":
@@ -158,57 +159,46 @@ public class ShowInformationActivity extends Activity {
                     dataBase.saveTelephoneNumberOwnershipInformation(ownership);
                     cancelDialog();
                     isSuccessful=Utilty.parsePhoneNumberOwnership(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "IP地址":
                     isSuccessful=Utilty.parseIpAddress(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "邮编":
                     isSuccessful=Utilty.parseZipCode(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "银行卡":
                     isSuccessful=Utilty.parseBankCard(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "苹果序列号":
                     isSuccessful=Utilty.parseAppleSerialNumber(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "苹果IMEI":
                     isSuccessful=Utilty.parseAppleIMEINumber(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "汇率":
                     isSuccessful=Utilty.parseExchangeRate(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "快递":
                     isSuccessful=Utilty.parseExpress(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "股票":
                     isSuccessful=Utilty.parseShares(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "火车票":
                     isSuccessful=Utilty.parseTrainTickets(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "商标":
                     isSuccessful=Utilty.parseTrademark(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "景点门票":
                     isSuccessful=Utilty.parseAttractionsTicketsPrice(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
                     break;
                 case "万年历":
                     isSuccessful=Utilty.parsePerpetualCalendar(context,object);
-                    dismissDialogAndShowInformation(isSuccessful);
+
                     break;
             }
+            dismissDialogAndShowInformation(isSuccessful);
         }
 
         @Override
@@ -219,14 +209,15 @@ public class ShowInformationActivity extends Activity {
     private void dismissDialogAndShowInformation(boolean isSuccessful) {
         cancelDialog();
         if (isSuccessful){
-            showInformattion();
+            showInformation();
         }else {
             makeToast();
-            onDestroy();
+            setResult(1);
+            ShowInformationActivity.this.finish();
         }
     }
 
-    private void showInformattion() {
+    private void showInformation() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -245,14 +236,17 @@ public class ShowInformationActivity extends Activity {
                 Toast.makeText(ShowInformationActivity.this,"查询失败",Toast.LENGTH_SHORT).show();
             }
         });
-
-        onBackPressed();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         ShowInformationActivity.this.finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
 
