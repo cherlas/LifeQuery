@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
@@ -38,6 +39,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.main_interface);
         spinnerChooseItem= (Spinner) findViewById(R.id.spinner_choose_item);
         swipeMenuListView= (SwipeMenuListView) findViewById(R.id.history_record);
@@ -73,6 +75,14 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
 
         searchContent= (EditText) findViewById(R.id.search_content);
 
+        //恢复数据
+        if (savedInstanceState!=null&&savedInstanceState.getString("search_data")!=null){
+            String searchData=savedInstanceState.getString("search_data");
+            searchContent.setText(searchData);
+            assert searchData!=null;
+            searchContent.setSelection(searchData.length());
+        }
+
         //点击搜索按钮事件
         ImageButton search= (ImageButton) findViewById(R.id.search_button);
         search.setOnClickListener(this);
@@ -107,6 +117,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
                 String data= (String) swipeMenuListView.getItemAtPosition(position);
                 String searchData=data.substring(data.lastIndexOf(" ")+1);
                 searchContent.setText(searchData);
+                searchContent.setSelection(searchContent.length());
             }
         });
         swipeMenuListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
@@ -114,7 +125,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index){
                     case 0:
-                        deleteDatabaseInformation();
+                        deleteDatabaseInformation(position);
                         //swipeMenuListView.notifyAll();
                         break;
                 }
@@ -126,13 +137,14 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
 
     private void listViewAdapter() {
         List<String> swipeListViewArr=getDatabaseSavedInformation();
+        //if (swipeListViewArr.size()==0) return;
         adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,swipeListViewArr);
         swipeMenuListView.setAdapter(adapter);
-
+        adapter.notifyDataSetChanged();
     }
 
     private List<String> getDatabaseSavedInformation() {
-        String[] tableNameKeyWordKey=getTableNameKeyWordKey();
+        String[] tableNameKeyWordKey=getTableNameKeyWordKey(-1);
         String tableName=tableNameKeyWordKey[0];
         String keyWord=tableNameKeyWordKey[1];
         String order=tableNameKeyWordKey[3];
@@ -141,9 +153,9 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         return res;
     }
 
-    private void deleteDatabaseInformation() {
+    private void deleteDatabaseInformation(int position) {
 
-        String[] tableNameKeyWordKey=getTableNameKeyWordKey();
+        String[] tableNameKeyWordKey=getTableNameKeyWordKey(position);
         String tableName=tableNameKeyWordKey[0];
         String keyWord=tableNameKeyWordKey[1];
         String key=tableNameKeyWordKey[2];
@@ -152,7 +164,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         listViewAdapter();
     }
 
-    private String[] getTableNameKeyWordKey() {
+    private String[] getTableNameKeyWordKey(int position) {
         String tableName="";
         String keyWord="";
         String key,order="";
@@ -223,7 +235,9 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
                 order="perpetual_calendar_search_date";
                 break;
         }
-        key=String.valueOf(searchContent.getText());
+        key=String.valueOf(swipeMenuListView.getItemAtPosition(position));
+        if (!key.equals("null"))
+            key=key.substring(key.lastIndexOf(" ")+1);
         return new String[]{tableName,keyWord,key,order};
     }
 
@@ -237,7 +251,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
                 showInformationIntent.putExtra("isFromMainInterface",true);
                 showInformationIntent.putExtra("chooseItem",chooseItem);
                 showInformationIntent.putExtra("inputContent",inputContent);
-                startActivity(showInformationIntent);
+                startActivityForResult(showInformationIntent,1);
                 break;
             default:
                 break;
@@ -253,17 +267,17 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode){
-            case 1: searchContent.setText((CharSequence) searchContent);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyAll();
-                    }
-                });
-                break;
+            case 0:
+                listViewAdapter();
             default:
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putString("search_data", String.valueOf(searchContent.getText()));
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 }
