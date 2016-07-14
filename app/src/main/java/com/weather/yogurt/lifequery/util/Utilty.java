@@ -128,7 +128,7 @@ public class Utilty {
             String minute=String.valueOf(calendar.get(Calendar.MINUTE));
             if (minute.length()<2) minute="0"+minute;
 
-            String time=month+"-"+day+" "+hour+":"+minute;
+            String time=month+"-"+day+"  "+hour+":"+minute;
 
             ipAddress.setSearchDate(time);
             dataBase.saveIpAddressInformation(ipAddress);
@@ -184,7 +184,7 @@ public class Utilty {
             if (minute.length()<2) minute="0"+minute;
 
 
-            String time=month+"-"+day+" "+hour+":"+minute;
+            String time=month+"-"+day+"  "+hour+":"+minute;
             ownership.setSearchDate(time);
             dataBase.saveTelephoneNumberOwnershipInformation(ownership);
             if (object.getString("retMsg").equals("success")){
