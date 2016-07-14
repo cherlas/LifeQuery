@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.baoyz.SwipeMenuListView.SwipeMenu;
 import com.baoyz.SwipeMenuListView.SwipeMenuCreator;
@@ -30,6 +31,8 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
 
     private EditText searchContent;
 
+    TextView hintMessage;
+
     private SwipeMenuListView swipeMenuListView;
 
     private QueryDataBase dataBase;
@@ -44,6 +47,7 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
         spinnerChooseItem= (Spinner) findViewById(R.id.spinner_choose_item);
         swipeMenuListView= (SwipeMenuListView) findViewById(R.id.history_record);
 
+        hintMessage= (TextView) findViewById(R.id.hint_message);
         dataBase =QueryDataBase.getInstance(this);
 
         //spinner drop down data;
@@ -136,6 +140,26 @@ public class MainInterface extends AppCompatActivity implements View.OnClickList
     }
 
     private void listViewAdapter() {
+
+            switch ((String)spinnerChooseItem.getSelectedItem()){
+                case "邮编":
+                case "苹果序列号":
+                case "苹果IMEI":
+                case "汇率":
+                case "快递":
+                case "股票":
+                case "火车票":
+                case "商标":
+                case "景点门票":
+                case "万年历":
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            hintMessage.setText("对不起,该功能正在实现中...带来不便,敬请谅解,谢谢!!");
+                        }
+                    });
+                    break;
+            }
         List<String> swipeListViewArr=getDatabaseSavedInformation();
         //if (swipeListViewArr.size()==0) return;
         adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,swipeListViewArr);
