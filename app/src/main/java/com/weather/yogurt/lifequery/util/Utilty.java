@@ -12,15 +12,15 @@ import com.weather.yogurt.lifequery.model.TelephoneNumberOwnership;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.text.DateFormat;
+import java.util.Calendar;
 
 /**
  * Created by Yogurt on 16/7/7.
  */
 public class Utilty {
 
-    private static SimpleDateFormat format=new SimpleDateFormat("MM-dd HH:mm");
+    private static DateFormat format=DateFormat.getDateTimeInstance();
 
     public static boolean parseShares(Context context, JSONObject object, String inputContent, QueryDataBase dataBase) {
         return false;
@@ -63,7 +63,25 @@ public class Utilty {
         if (status.equals("1")){
             BankCard bankCard=new BankCard();
             bankCard.setBankCardNumber(inputContent);
-            bankCard.setSearchDate(format.format(new Date()));
+
+            Calendar calendar=Calendar.getInstance();
+
+            String month=String.valueOf(calendar.get(Calendar.MONTH)+1);
+            if (month.length()<2) month="0"+month;
+
+            String day=String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+            if (day.length()<2) day="0"+day;
+
+            String hour=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+            if (hour.length()<2) hour="0"+hour;
+
+            String minute=String.valueOf(calendar.get(Calendar.MINUTE));
+            if (minute.length()<2) minute="0"+minute;
+
+
+            String time=month+"-"+day+" "+hour+":"+minute;
+
+            bankCard.setSearchDate(time);
             dataBase.saveBankCardInformation(bankCard);
             JSONObject retData=object.getJSONObject("data");
             SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
@@ -96,7 +114,23 @@ public class Utilty {
         if (errNum.equals("0")){
             IPAddress ipAddress=new IPAddress();
             ipAddress.setIpAddress(inputContent);
-            ipAddress.setSearchDate(format.format(new Date()));
+            Calendar calendar=Calendar.getInstance();
+
+            String month=String.valueOf(calendar.get(Calendar.MONTH)+1);
+            if (month.length()<2) month="0"+month;
+
+            String day=String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+            if (day.length()<2) day="0"+day;
+
+            String hour=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+            if (hour.length()<2) hour="0"+hour;
+
+            String minute=String.valueOf(calendar.get(Calendar.MINUTE));
+            if (minute.length()<2) minute="0"+minute;
+
+            String time=month+"-"+day+" "+hour+":"+minute;
+
+            ipAddress.setSearchDate(time);
             dataBase.saveIpAddressInformation(ipAddress);
             if (object.getString("retMsg").equals("success")){
                 JSONObject retData=object.getJSONObject("retData");
@@ -135,7 +169,23 @@ public class Utilty {
         if (errNum.equals("0")){
             TelephoneNumberOwnership ownership=new TelephoneNumberOwnership();
             ownership.setTelephoneNumber(inputContent);
-            ownership.setSearchDate(format.format(new Date()));
+            Calendar calendar=Calendar.getInstance();
+
+            String month=String.valueOf(calendar.get(Calendar.MONTH)+1);
+            if (month.length()<2) month="0"+month;
+
+            String day=String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+            if (day.length()<2) day="0"+day;
+
+            String hour=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+            if (hour.length()<2) hour="0"+hour;
+
+            String minute=String.valueOf(calendar.get(Calendar.MINUTE));
+            if (minute.length()<2) minute="0"+minute;
+
+
+            String time=month+"-"+day+" "+hour+":"+minute;
+            ownership.setSearchDate(time);
             dataBase.saveTelephoneNumberOwnershipInformation(ownership);
             if (object.getString("retMsg").equals("success")){
                 JSONObject retData=object.getJSONObject("retData");
