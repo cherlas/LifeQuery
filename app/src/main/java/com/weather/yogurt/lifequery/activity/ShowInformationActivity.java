@@ -42,6 +42,8 @@ public class ShowInformationActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_information_activity_layout);
 
+        dataBase=QueryDataBase.getInstance(this);
+
         showInformationText= (TextView) findViewById(R.id.showInformationText);
 
         Intent intentFromMainInterface=getIntent();
@@ -54,7 +56,7 @@ public class ShowInformationActivity extends Activity {
                 requestInformation();
             }
         }
-        dataBase=QueryDataBase.getInstance(this);
+
     }
 
     private void requestInformation() {
@@ -65,7 +67,7 @@ public class ShowInformationActivity extends Activity {
                 searchAddress="http://apis.baidu.com/apistore/mobilenumber/mobilenumber?phone="+inputContent;
                 break;
             case "IP地址": //http://apistore.baidu.com/apiworks/servicedetail/114.html
-                searchAddress="http://apis.baidu.com/apistore/iplookupservice/iplookup?"+inputContent;
+                searchAddress="http://apis.baidu.com/apistore/iplookupservice/iplookup?ip="+inputContent;
                 break;
             case "邮编"://http://avatardata.cn/Docs/Api/b3d25cbd-449d-41c3-8765-21649658789e
                 searchAddress="http://api.avatardata.cn/PostNumber/QueryPostnumber?key=[您申请的APPKEY]&postnumber="
@@ -73,7 +75,7 @@ public class ShowInformationActivity extends Activity {
                 apiKey="";
                 break;
             case "银行卡"://http://apistore.baidu.com/apiworks/servicedetail/735.html
-                searchAddress="http://apis.baidu.com/datatiny/cardinfo/cardinfo"+inputContent;
+                searchAddress="http://apis.baidu.com/datatiny/cardinfo/cardinfo?cardnum="+inputContent;
                 break;
             case "苹果序列号"://...
                 searchAddress="http://apis.baidu.com/apistore/mobilenumber/mobilenumber?"+inputContent;
@@ -191,6 +193,7 @@ public class ShowInformationActivity extends Activity {
 
         @Override
         public void onError(Exception e) {
+            dismissDialogAndShowInformation(false);
         }
     };
 
