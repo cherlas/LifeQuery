@@ -35,6 +35,12 @@
         android:layout_marginEnd="42dp"
         android:scaleType="fitCenter"/>
 </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="38dp"
+        android:id="@+id/hint_message"
+        android:textColor="@android:color/holo_red_light"/>
     <com.baoyz.SwipeMenuListView.SwipeMenuListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
