@@ -38,8 +38,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="38dp"
+        android:textSize="12dp"
         android:id="@+id/hint_message"
+        android:layout_marginLeft="30dp"
         android:textColor="@android:color/holo_red_light"/>
     <com.baoyz.SwipeMenuListView.SwipeMenuListView
         android:layout_width="match_parent"
