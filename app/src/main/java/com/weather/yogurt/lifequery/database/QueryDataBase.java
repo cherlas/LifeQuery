@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.weather.yogurt.lifequery.model.AppleIMEINumber;
 import com.weather.yogurt.lifequery.model.AppleSerialNumber;
@@ -55,7 +56,10 @@ public class QueryDataBase {
     //存储电话归属地数据
     public void saveTelephoneNumberOwnershipInformation(TelephoneNumberOwnership telephoneNumberOwnership){
         if (telephoneNumberOwnership!=null){
-            Cursor cursor=query("TelephoneHomeOwnership",telephoneNumberOwnership.getTelephoneNumber());
+            String number=telephoneNumberOwnership.getTelephoneNumber();
+            Cursor cursor=query("TelephoneHomeOwnership","telephone_number",telephoneNumberOwnership.getTelephoneNumber());
+            int s=cursor.getCount();
+            Log.d("SSS",String.valueOf(s));
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("telephone_search_date",telephoneNumberOwnership.getSearchDate());
@@ -70,23 +74,23 @@ public class QueryDataBase {
         }
     }
 
-    private Cursor query(String tableName, String searchNumber) {
-        Cursor cursor=db.query(tableName,new String[]{searchNumber},null,null,null,null,null);
+    private Cursor query(String tableName, String cloums,String searchNumber) {
+        Cursor cursor=db.query(tableName,new String[]{cloums},cloums+"=?",new String[]{searchNumber},null,null,null);
         return cursor;
     }
 
     //ip地址
     public void saveIpAddressInformation(IPAddress ipAddress){
         if (ipAddress!=null){
-            Cursor cursor=query("IpAddress",ipAddress.getIpAddress());
+            Cursor cursor=query("IpAddress","ip_address",ipAddress.getIpAddress());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("ip_address_search_date",ipAddress.getSearchDate());
                 db.update("IpAddress",values,"ip_address=?",new String[]{ipAddress.getIpAddress()});
             }else {
                 ContentValues values=new ContentValues();
-                values.put("telephone_number",ipAddress.getIpAddress());
-                values.put("telephone_search_date",ipAddress.getSearchDate());
+                values.put("ip_address",ipAddress.getIpAddress());
+                values.put("ip_address_search_date",ipAddress.getSearchDate());
                 db.insert("IpAddress",null,values);
             }
         }
@@ -95,7 +99,7 @@ public class QueryDataBase {
     //AppleSerialNumber
     public void saveAppleSerialNumberInformation(AppleSerialNumber appleSerialNumber){
         if (appleSerialNumber!=null){
-            Cursor cursor=query("AppleSerialNumber",appleSerialNumber.getAppleSerialNumber());
+            Cursor cursor=query("AppleSerialNumber","apple_serial_number",appleSerialNumber.getAppleSerialNumber());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("apple_serial_number_search_date",appleSerialNumber.getSearchDate());
@@ -112,7 +116,7 @@ public class QueryDataBase {
     //Apple IMEI
     public void saveAppleIMEINumberInformation(AppleIMEINumber appleIMEINumber){
         if (appleIMEINumber!=null){
-            Cursor cursor=query("AppleIMEINumber",appleIMEINumber.getAppleIMEINumber());
+            Cursor cursor=query("AppleIMEINumber","apple_imei_number",appleIMEINumber.getAppleIMEINumber());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("apple_imei_number_search_date",appleIMEINumber.getSearchDate());
@@ -129,7 +133,7 @@ public class QueryDataBase {
     //Express
     public void saveExpressInformation(Express express){
         if (express!=null){
-            Cursor cursor=query("Express",express.getExpress());
+            Cursor cursor=query("Express","express_number",express.getExpress());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("express_search_date",express.getSearchDate());
@@ -146,7 +150,7 @@ public class QueryDataBase {
     //BankCard
     public void saveBankCardInformation(BankCard bankCard){
         if (bankCard!=null){
-            Cursor cursor=query("BankCard",bankCard.getBankCardNumber());
+            Cursor cursor=query("BankCard","bank_card_number",bankCard.getBankCardNumber());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("bank_card_search_date",bankCard.getSearchDate());
@@ -163,7 +167,7 @@ public class QueryDataBase {
     //Shares
     public void saveSharesInformation(Shares shares){
         if (shares!=null){
-            Cursor cursor=query("Shares",shares.getShares());
+            Cursor cursor=query("Shares","shares",shares.getShares());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("shares_search_date",shares.getSearchDate());
@@ -180,7 +184,7 @@ public class QueryDataBase {
     //TrainTickets
     public void saveTrainTicketsInformation(TrainTickets trainTickets){
         if (trainTickets!=null){
-            Cursor cursor=query("TrainTickets",trainTickets.getTrainTicketsNumber());
+            Cursor cursor=query("TrainTickets","train_tickets_number",trainTickets.getTrainTicketsNumber());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("train_tickets_search_date",trainTickets.getSearchDate());
@@ -197,7 +201,7 @@ public class QueryDataBase {
     //ZipCode
     public void saveZipCodeInformation(ZipCode zipCode){
         if (zipCode!=null){
-            Cursor cursor=query("ZipCode",zipCode.getZipCodeNumber());
+            Cursor cursor=query("ZipCode","zip_code_number",zipCode.getZipCodeNumber());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("zip_code_search_date",zipCode.getSearchDate());
@@ -214,7 +218,7 @@ public class QueryDataBase {
     //ExchangeRate
     public void saveExchangeRateInformation(ExchangeRate exchangeRate){
         if (exchangeRate!=null){
-            Cursor cursor=query("ExchangeRate",exchangeRate.getExchangeRate());
+            Cursor cursor=query("ExchangeRate","exchange_rate",exchangeRate.getExchangeRate());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("exchange_rate_search_date",exchangeRate.getSearchDate());
@@ -231,7 +235,7 @@ public class QueryDataBase {
     //Trademark
     public void saveTrademarkInformation(Trademark trademark){
         if (trademark!=null){
-            Cursor cursor=query("Trademark",trademark.getTrademark());
+            Cursor cursor=query("Trademark","trademark",trademark.getTrademark());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("trademark_search_date",trademark.getSearchDate());
@@ -248,7 +252,7 @@ public class QueryDataBase {
     //AttractionsTickets
     public void saveAttractionsTicketsInformation(AttractionsTicketsPrice attractionsTicketsPrice){
         if (attractionsTicketsPrice!=null){
-            Cursor cursor=query("AttractionsTickets",attractionsTicketsPrice.getAttractionName());
+            Cursor cursor=query("AttractionsTickets","attractions_name",attractionsTicketsPrice.getAttractionName());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("attractions_search_date",attractionsTicketsPrice.getSearchDate());
@@ -265,7 +269,7 @@ public class QueryDataBase {
     //PerpetualCalendar
     public void savePerpetualCalendarInformation(PerpetualCalendar perpetualCalendar){
         if (perpetualCalendar!=null){
-            Cursor cursor=query("PerpetualCalendar",perpetualCalendar.getPerpetualCalendar());
+            Cursor cursor=query("PerpetualCalendar","perpetual_calendar",perpetualCalendar.getPerpetualCalendar());
             if (cursor.getCount()!=0){
                 ContentValues values=new ContentValues();
                 values.put("perpetual_calendar_search_date",perpetualCalendar.getSearchDate());
