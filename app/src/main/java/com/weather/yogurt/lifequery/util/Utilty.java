@@ -138,17 +138,17 @@ public class Utilty {
                 String province=retData.getString("province");
                 String city=retData.getString("city");
                 String district=retData.getString("district");
-                if (province.equals("none"))
-                    stringBuffer.append("国外省份").append("\r\n");
-                else stringBuffer.append(province).append("\r\n");
+                if (province.equals("None"))
+                    stringBuffer.append("所在省份: ").append("国外省份").append("\r\n");
+                else stringBuffer.append("所在省份: ").append(province).append("\r\n");
 
-                if (city.equals("none"))
-                    stringBuffer.append("国外城市").append("\r\n");
-                else stringBuffer.append(city).append("\r\n");
+                if (city.equals("None"))
+                    stringBuffer.append("所在城市: ").append("国外城市").append("\r\n");
+                else stringBuffer.append("所在城市: ").append(city).append("\r\n");
 
-                if (district.equals("none"))
-                    stringBuffer.append("国外地区").append("\r\n");
-                else stringBuffer.append(district).append("\r\n");
+                if (district.equals("None"))
+                    stringBuffer.append("所在地区: ").append("国外地区").append("\r\n");
+                else stringBuffer.append("所在地区: ").append(district).append("\r\n");
 
                 stringBuffer.append("运营商: ").append(retData.getString("carrier"));
                 editor.putString("result",stringBuffer.toString());
