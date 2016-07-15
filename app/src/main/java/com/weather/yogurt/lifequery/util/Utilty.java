@@ -12,15 +12,12 @@ import com.weather.yogurt.lifequery.model.TelephoneNumberOwnership;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 
 /**
  * Created by Yogurt on 16/7/7.
  */
 public class Utilty {
-
-    private static DateFormat format=DateFormat.getDateTimeInstance();
 
     public static boolean parseShares(Context context, JSONObject object, String inputContent, QueryDataBase dataBase) {
         return false;
@@ -132,7 +129,7 @@ public class Utilty {
 
             ipAddress.setSearchDate(time);
             dataBase.saveIpAddressInformation(ipAddress);
-            if (object.getString("retMsg").equals("success")){
+            if (object.getString("errMsg").equals("success")){
                 JSONObject retData=object.getJSONObject("retData");
                 SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
                 StringBuffer stringBuffer=new StringBuffer();
